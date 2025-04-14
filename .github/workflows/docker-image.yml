@@ -1,10 +1,14 @@
-name: Build and Run Docker
+name: Build and Run Docker with ARG
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name to greet'
+        required: false
+        default: 'Captain'
 
 jobs:
   build-and-run:
@@ -14,8 +18,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Build Docker image
-      run: docker build -t hello-captain .
+    - name: Build Docker image with custom name
+      run: |
+        echo "Using name: ${{ github.event.inputs.name }}"
+        docker build --build-arg NAME="${{ github.event.inputs.name }}" -t hello-custom .
 
     - name: Run Docker container
-      run: docker run hello-captain
+      run: docker run hello-custom
