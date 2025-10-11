@@ -1,0 +1,101 @@
+# swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "RP Flask REST API"
+  description: "An API about people and notes"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        fname:
+          type: string
+          description: First name
+        lname:
+          type: string
+          description: Last name
+        timestamp:
+          type: string
+          description: Timestamp of creation
+      required:
+        - lname
+  parameters:
+    lname: 
+      name: "lname"
+      description: "Last name of the person to get"
+      in: path
+      required: true
+      schema:
+        type: string
+
+paths:
+  /people:
+    get:
+      operationId: "people.read_all"
+      tags:
+        - "People"
+      summary: "Read the list of all people"
+      responses:
+        "200":
+          description: "Successfully read people list"
+    post: 
+      operationId: "people.create"
+      tags:
+        - "People"
+      summary: "Create a new person"
+      requestBody:
+        description: "Person to add"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "person"
+              $ref: "#/components/schemas/Person"
+      responses:
+        "201":
+          description: "Successfully created person"
+  /people/{lname}:
+    get:
+      operationId: "people.read_one"
+      tags:
+        - People
+      summary: "Read a single person by last name"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200":
+          description: "Successfully read person"
+    put:
+      operationId: "people.update"
+      tags:
+        - People
+      summary: "Update a person's details"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      requestBody:
+        description: "Person details to update"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "person"
+              $ref: "#/components/schemas/Person"
+      responses:
+        "200":
+          description: "Successfully updated person"
+    delete:
+      operationId: "people.delete"
+      tags:
+        - People
+      summary: "Delete a person by last name"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200":
+          description: "Successfully deleted person"
