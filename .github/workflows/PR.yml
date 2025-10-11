@@ -36,8 +36,8 @@ jobs:
         with:
           # branch to create for the PR. leave blank to auto-generate based on changes
           branch: "auto/pr-${{ github.ref_name }}" 
-          base: main
-          title: "Automated PR: ${{ github.ref_name }} -> main"
+          base: master
+          title: "Automated PR: ${{ github.ref_name }} -> master"
           body: |
             This PR was automatically created/updated by GitHub Actions.
           labels: |
