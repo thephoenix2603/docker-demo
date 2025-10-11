@@ -1,0 +1,48 @@
+name: Auto PR on branch create or push
+
+on:
+  create:
+    # when a ref is created
+    refs:
+      - refs/heads/**
+  push:
+    # when commits push to feature branches
+    branches:
+      - 'feature/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Make changes or run script (optional)
+        # Example: regenerate a report or update a version file
+        run: |
+          # do something useful here that changes files
+          echo "Auto update at $(date)" >> auto-update.txt
+          git add auto-update.txt
+          git commit -m "chore: automated update" || echo "no changes to commit"
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # branch to create for the PR. leave blank to auto-generate based on changes
+          branch: "auto/pr-${{ github.ref_name }}" 
+          base: main
+          title: "Automated PR: ${{ github.ref_name }} -> main"
+          body: |
+            This PR was automatically created/updated by GitHub Actions.
+          labels: |
+            automated
+            auto-pr
+          # If you want reviewers or assignees:
+          # reviewers: octocat
+          # reviewers and assignees require repo permissions
