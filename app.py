@@ -1,6 +1,7 @@
+import config
+
 from flask import render_template
 
-import config
 from models import Person
 
 app = config.connex_app
@@ -17,4 +18,5 @@ def api_viewer():
     return render_template('api_viewer.html', people=people)
 
 if __name__=="__main__":
+
     app.run(host="0.0.0.0", port= 8000, debug=True)
