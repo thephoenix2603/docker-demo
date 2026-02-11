@@ -1,6 +1,7 @@
 name: Auto PR on branch create or push
 
 on:
+  workflow_dispatch:
   create:
     # when a ref is created
     refs:
